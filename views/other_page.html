@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog dodanych filmów</title>
+
+    <!-- <link rel="stylesheet" href="/styles.css"> -->
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Intro', sans-serif;
+            background-color: #000;
+            color: white;
+            position: relative;
+        }
+
+
+        .text-container {
+            position: absolute;
+            top: 20px; /* Расположение сверху экрана */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000; /* Помещение текста над видео */
+            font-size: 24px; /* Размер шрифта */
+            text-align: center; /* Выравнивание по центру */
+        }
+
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Высота контейнера для видео */
+            margin-bottom: 20px; /* Отступ снизу */
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        #moviesList {
+            position: absolute;
+            top: 150px; /* списка под текстом */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; /* Ширина */
+            display: flex; /* одну линию */
+            flex-wrap: wrap; /* Перенос фильмов на новую строку при необходимости */
+            justify-content: flex-start; /* Размещение слева направо */
+            gap: 20px; /* Расстояние */
+        }
+
+
+        .movie {
+            width: calc((100% - 80px) / 12); /* Ширина каждого фильма расстояние между ними */
+
+            overflow: hidden;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .movie img {
+            width: 150px; /* ширина  */
+            height: 200px; /* высота */
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .movie-info {
+            margin-top: 10px;
+        }
+
+
+        .tab-link {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            background-color: #ee0808;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab-link:hover {
+            background-color: #800033;
+        }
+    </style>
+</head>
+<body>
+
+<div class="text-container">
+    <h2>Lista dodanych filmów</h2>
+</div>
+
+
+<div class="video-container">
+    <video src="/kio1.mp4" autoplay muted loop></video>
+</div>
+
+<div id="moviesList"></div>
+<div class="movie"></div>
+<div class="movie-info"></div>
+
+<a href="http://localhost:3000/list_of_movies1" class="tab-link">Powrót</a>
+
+<script>
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const moviesParam = urlParams.get('movies');
+
+    const movies = JSON.parse(moviesParam);
+
+    // Функция для отображения фильмов на странице
+    function displayMovies(movies) {
+        const moviesList = document.getElementById('moviesList');
+
+        movies.forEach(movie => {
+            const movieDiv = document.createElement('div');
+            movieDiv.classList.add('movie');
+
+            const movieImage = document.createElement('img');
+            movieImage.src = `/uploads/${movie.photo}`;
+            movieImage.alt = 'Zdjęcie filmu';
+            movieDiv.appendChild(movieImage);
+
+            const movieInfo = document.createElement('div');
+            movieInfo.classList.add('movie-info');
+            movieInfo.innerHTML = `
+                <strong>Nazwa:</strong> ${movie.title}<br>
+                <strong>Reżyser:</strong> ${movie.director}<br>
+                <strong>Moja ocena:</strong> ${movie.rating}<br>
+            `;
+            movieDiv.appendChild(movieInfo);
+
+            moviesList.appendChild(movieDiv);
+        });
+    }
+
+    // Вывод фильмов на страничку
+    if (movies && movies.length > 0) {
+        displayMovies(movies);
+    } else {
+        const moviesList = document.getElementById('moviesList');
+        moviesList.innerHTML = '<p>Brak dodanych filmów.</p>';
+    }
+</script>
+
+</body>
+</html>

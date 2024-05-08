@@ -1,0 +1,39 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog filmów</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: 'Intro', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="video-container">
+    <video src="/kio1.mp4" autoplay muted loop></video>
+    <div class="overlay">
+        <h1>Witam na mojej stronie,tu można dodać swoje filmiki.</h1>
+        <h1>Dodawanie filmu.</h1>
+        <form action="/add_movie" method="post" enctype="multipart/form-data" lang="pl">
+            <input type="text" name="title" placeholder="Nazwa filmu" required><br>
+            <input type="text" name="director" placeholder="Reżyser" required><br>
+            <input type="number" name="rating" placeholder="Ocena" min="1" max="10" required><br>
+            <input type="file" name="photo" accept="image/*" required title="Wybierz zdjęcie"><br>
+            <button type="submit">Dodaj</button>
+        </form>
+        <h1>Nikita Sukhovoi IN-2.</h1>
+    </div>
+</div>
+
+<a href="http://localhost:3000/list_of_movies1" class="tab-link">Dodane filmy</a>
+
+
+
+
+</body>
+</html>

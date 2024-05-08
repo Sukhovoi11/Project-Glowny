@@ -1,0 +1,162 @@
+<!-- list_of_movies1.ejs -->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodane filmy</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Intro', sans-serif;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            color: #ffffff;
+            z-index: 100; /* поверх остальных элементов */
+        }
+
+        .overlay h1 {
+            margin-bottom: 20px;
+        }
+
+        .overlay img {
+            width: 80%; /* Ширина изображения */
+            border-radius: 10px; /* Скругляем углы изображения */
+            margin-bottom: 20px; /* Отступ снизу */
+        }
+
+        .movie-details {
+            text-align: center;
+            bottom: -30px;
+            left: 0px;
+            font-weight: 399; /* -!-!- */
+        }
+
+        .tab-link {
+            position: fixed; /* Фиксируем элемент */
+            bottom: 20px; /* Располагаем снизу */
+            padding: 8px 16px; /* Отступы */
+            background-color: #ff0000;
+            color: #fff;
+            text-decoration: none; /* Убираем подчеркивание ссылки?? */
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        .tab-link.left {
+            left: calc(50% - 100px - 20px); /* Выравниваем по левому краю с отступом */
+        }
+
+        .tab-link.right {
+            left: calc(50% + 20px);
+        }
+
+        .tab-link:hover {
+            background-color: #800033; /* при !!! наведении */
+        }
+
+
+        .movies-list-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 300px;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            overflow-y: auto; /* вертикальную прокрутку, если фильмов слишком много */
+            max-height: calc(100% - 40px); /* МаксИМАЛЬНАЯ !!!! высота контейнера  */
+        }
+
+        .movies-list-container h2 {
+            margin-top: 0; /* Убираем верхний отступ у заголовка */
+        }
+
+        .movies-list-container ul {
+            padding: 0; /* Убираем внутренние отступы у списка */
+            list-style: none; /* Убираем маркеры */
+        }
+
+        .movies-list-container li {
+            margin-bottom: 10px; /* небольшой отступ между элементами */
+        }
+    </style>
+</head>
+<body>
+<div class="video-container">
+    <video src="/kio1.mp4" autoplay muted loop></video>
+</div>
+<div class="header">
+    <div class="overlay">
+        <% if (movies.length > 0) { %>
+            <% const latestMovie = movies[movies.length - 1]; %>
+            <h1>Nowo dodany film</h1>
+            <img src="/uploads/<%= latestMovie.photo %>" alt="Zdjęcie filmu">
+            <div class="movie-details">
+                <strong>Nazwa:</strong> <%= latestMovie.title %><br>
+                <strong>Reżyser:</strong> <%= latestMovie.director %><br>
+                <strong>Moja ocena:</strong> <%= latestMovie.rating %><br>
+            </div>
+        <% } else { %>
+            <p>Brak dodanych filmów.</p>
+        <% } %>
+    </div>
+    <div class="movies-scroll-container">
+        <% if (movies.length > 0) { %>
+            <% movies.slice(0, movies.length - 1).reverse().forEach(movie => { %>
+                <div class="movie">
+                    <% if (movie.photo) { %>
+                        <img src="/uploads/<%= movie.photo %>" alt="Zdjęcie filmu">
+                    <% } %>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>Brak dodanych filmów. Proszę dodać film na głównym ekranie.</p>
+        <% } %>
+    </div>
+</div>
+
+<a href="/" class="tab-link left">Powrót</a>
+
+
+<a href="http://localhost:3000/other_page?movies=<%= JSON.stringify(movies) %>" class="tab-link right">Katalog Filmów</a>
+
+
+<div class="movies-list-container">
+    <h2>Lista wszystkich filmów</h2>
+    <ul>
+        <% movies.forEach(movie => { %>
+            <li><%= movie.title %> - Reżyser: <%= movie.director %>, Ocena: <%= movie.rating %></li>
+        <% }); %>
+    </ul>
+</div>
+
+</body>
+</html>
